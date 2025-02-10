@@ -43,7 +43,6 @@ const ContactPage = () => {
               }}
             >
               <CustomBox site={site} />{" "}
-              {/* CustomBox with the respective site */}
             </a>
           );
         })}
