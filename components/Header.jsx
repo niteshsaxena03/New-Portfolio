@@ -38,13 +38,14 @@ const Header = () => {
       {/* Portfolio Title Styling */}
       <div
         style={{
+          textAlign: "center",
           fontWeight: "bold",
-          fontSize: "50px", // Increased font size for prominence
-          color: "white",
-          letterSpacing: "2px", // Adds space between the letters for style
-          marginBottom: "10px", // Add margin between title and buttons
-          borderRadius: "40%",
-          padding: "10px",
+          fontSize:50,
+          marginBottom: 40,
+          background: "linear-gradient(45deg, #FF6347, #00bcd4)", // Gradient background
+          WebkitBackgroundClip: "text",
+          color: "transparent",
+          margin:10,
         }}
       >
         Portfolio
