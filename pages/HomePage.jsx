@@ -64,7 +64,7 @@ const HomePage = () => {
           }}
         >
           <img
-            src="public/images/nitesh-saxena.png" // Replace with your image path
+            src="/images/nitesh-saxena.png" // Replace with your image path
             alt="Nitesh Saxena"
             style={{
               width: screenWidth < 768 ? "200px" : "350px", // Adjust image size for mobile
