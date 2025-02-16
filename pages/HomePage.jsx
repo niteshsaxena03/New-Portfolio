@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 
 const HomePage = () => {
   const [role, setRole] = useState("Competitive Programmer");
-  const roles = ["Competitive Programmer", "Web Developer", "Mobile Developer"];
+  const roles = ["Competitive Programmer", "Web Developer", "App Developer"];
   const [roleIndex, setRoleIndex] = useState(0);
   const [screenWidth, setScreenWidth] = useState(window.innerWidth);
 
