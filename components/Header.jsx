@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import CustomButton from "./CustomButton";
-import { FaBars, FaTimes } from "react-icons/fa"; // Importing react-icons for hamburger icon
+import { FaBars, FaTimes } from "react-icons/fa";
 
 const Header = () => {
   const names = ["Home", "About", "Projects", "DSA", "Contact"];
@@ -12,12 +12,10 @@ const Header = () => {
     const handleResize = () => {
       setIsSmallScreen(window.innerWidth <= 768);
     };
-
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  // Toggle dropdown visibility
   const toggleDropdown = () => {
     setDropdownOpen(!isDropdownOpen);
   };
@@ -29,29 +27,29 @@ const Header = () => {
         justifyContent: "space-between",
         alignItems: "center",
         backgroundColor: "#0a0a0a",
-        height: "25%", // Height of the header
+        height: "25%",
         padding: "0 20px",
         position: "relative",
         borderBottom: "1px solid rgba(255, 255, 255, 0.1)",
       }}
     >
-      {/* Portfolio Title Styling */}
+      {/* Portfolio Title - Remains unchanged */}
       <div
         style={{
           textAlign: "center",
           fontWeight: "bold",
-          fontSize:50,
+          fontSize: 50,
           marginBottom: 40,
-          background: "linear-gradient(45deg, #FF6347, #00bcd4)", // Gradient background
+          background: "linear-gradient(45deg, #FF6347, #00bcd4)",
           WebkitBackgroundClip: "text",
           color: "transparent",
-          margin:10,
+          margin: 10,
         }}
       >
         Portfolio
       </div>
 
-      {/* Menu Button for Mobile */}
+      {/* Mobile Menu Button - Remains unchanged */}
       {isSmallScreen && (
         <button
           onClick={toggleDropdown}
@@ -63,7 +61,7 @@ const Header = () => {
             cursor: "pointer",
             borderRadius: "5px",
             border: "none",
-            display: "block", // Show button on mobile
+            display: "block",
           }}
         >
           {isDropdownOpen ? (
@@ -74,20 +72,21 @@ const Header = () => {
         </button>
       )}
 
-      {/* Dropdown Menu for Mobile */}
+      {/* Updated Dropdown Menu */}
       {isSmallScreen && isDropdownOpen && (
         <div
           style={{
             display: "flex",
             flexDirection: "column",
             justifyContent: "center",
-            alignItems: "flex-end", // Align items centered under the FaBars/FaTimes icon
+            alignItems: "flex-end",
             position: "absolute",
-            top: "70px", // Position dropdown below the button
+            top: "70px",
             backgroundColor: "transparent",
             width: "92%",
             borderRadius: "5px",
             padding: "10px",
+            zIndex: 2, // Ensure dropdown appears above other elements
           }}
         >
           {names.map((name) => (
@@ -95,6 +94,7 @@ const Header = () => {
               <Link
                 to={name === "Home" ? "/" : `/${name.toLowerCase()}`}
                 style={{ textDecoration: "none" }}
+                onClick={() => setDropdownOpen(false)} // Close menu on click
               >
                 <CustomButton page={name} />
               </Link>
@@ -103,7 +103,7 @@ const Header = () => {
         </div>
       )}
 
-      {/* Navigation Buttons for Desktop */}
+      {/* Desktop Navigation - Remains unchanged */}
       {!isSmallScreen && (
         <div
           style={{
@@ -112,17 +112,15 @@ const Header = () => {
             alignItems: "center",
           }}
         >
-          {names.map((name) => {
-            return (
-              <Link
-                key={name}
-                to={name === "Home" ? "/" : `/${name.toLowerCase()}`}
-                style={{ textDecoration: "none" }}
-              >
-                <CustomButton page={name} />
-              </Link>
-            );
-          })}
+          {names.map((name) => (
+            <Link
+              key={name}
+              to={name === "Home" ? "/" : `/${name.toLowerCase()}`}
+              style={{ textDecoration: "none" }}
+            >
+              <CustomButton page={name} />
+            </Link>
+          ))}
         </div>
       )}
     </div>
