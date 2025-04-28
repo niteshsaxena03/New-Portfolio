@@ -36,13 +36,16 @@ const ProjectPage = () => {
   const [isMobileScreen, setIsMobileScreen] = useState(
     window.innerWidth <= 480
   );
+  const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth <= 768);
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
     setIsVisible(true);
     const handleResize = () => {
-      setScreenWidth(window.innerWidth);
-      setIsMobileScreen(window.innerWidth <= 480);
+      const width = window.innerWidth;
+      setScreenWidth(width);
+      setIsMobileScreen(width <= 480);
+      setIsSmallScreen(width <= 768);
     };
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
@@ -65,6 +68,18 @@ const ProjectPage = () => {
       50% { background-position: 100% 50%; }
       100% { background-position: 0% 50%; }
     }
+    
+    @media (max-width: 480px) {
+      .project-container {
+        gap: 20px;
+      }
+    }
+    
+    @media (max-width: 380px) {
+      .project-container {
+        gap: 15px;
+      }
+    }
   `;
 
   return (
@@ -75,9 +90,9 @@ const ProjectPage = () => {
         minHeight: "100vh",
         background: "linear-gradient(135deg, #060c17 0%, #0a1121 100%)",
         padding: isMobileScreen
-          ? "20px 12px"
-          : screenWidth < 768
-            ? "30px 20px"
+          ? "20px 10px 30px"
+          : isSmallScreen
+            ? "30px 15px 40px"
             : "50px 40px",
         color: "white",
         position: "relative",
@@ -90,8 +105,8 @@ const ProjectPage = () => {
       <div
         style={{
           position: "absolute",
-          width: isMobileScreen ? "150px" : "300px",
-          height: isMobileScreen ? "150px" : "300px",
+          width: isMobileScreen ? "120px" : isSmallScreen ? "200px" : "300px",
+          height: isMobileScreen ? "120px" : isSmallScreen ? "200px" : "300px",
           borderRadius: "50%",
           background:
             "radial-gradient(circle, rgba(0, 136, 255, 0.05) 0%, transparent 70%)",
@@ -103,8 +118,8 @@ const ProjectPage = () => {
       <div
         style={{
           position: "absolute",
-          width: isMobileScreen ? "200px" : "400px",
-          height: isMobileScreen ? "200px" : "400px",
+          width: isMobileScreen ? "150px" : isSmallScreen ? "250px" : "400px",
+          height: isMobileScreen ? "150px" : isSmallScreen ? "250px" : "400px",
           borderRadius: "50%",
           background:
             "radial-gradient(circle, rgba(0, 255, 136, 0.04) 0%, transparent 70%)",
@@ -117,17 +132,21 @@ const ProjectPage = () => {
       {/* Page title */}
       <h1
         style={{
-          fontSize: isMobileScreen
-            ? "28px"
-            : screenWidth < 768
-              ? "36px"
-              : "48px",
+          fontSize: isMobileScreen ? "26px" : isSmallScreen ? "34px" : "48px",
           textAlign: "center",
-          margin: isMobileScreen ? "5px 0 25px" : "10px 0 40px",
+          margin: isMobileScreen
+            ? "0 0 20px"
+            : isSmallScreen
+              ? "5px 0 30px"
+              : "10px 0 40px",
           background: "linear-gradient(45deg, #00c2ff, #00ff8a)",
           WebkitBackgroundClip: "text",
           color: "transparent",
-          letterSpacing: isMobileScreen ? "1px" : "2px",
+          letterSpacing: isMobileScreen
+            ? "0.8px"
+            : isSmallScreen
+              ? "1.5px"
+              : "2px",
           fontWeight: "700",
           opacity: isVisible ? 1 : 0,
           transform: isVisible ? "translateY(0)" : "translateY(20px)",
@@ -138,34 +157,27 @@ const ProjectPage = () => {
       </h1>
 
       <div
+        className="project-container"
         style={{
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
-          gap: isMobileScreen ? "25px" : "40px",
+          gap: isMobileScreen ? "20px" : isSmallScreen ? "30px" : "40px",
           position: "relative",
           zIndex: 1,
           maxWidth: "1200px",
           margin: "0 auto",
+          width: "100%",
         }}
       >
         {projects.map((project, index) => (
-          <div
+          <ProjectBox
             key={index}
-            style={{
-              opacity: isVisible ? 1 : 0,
-              transform: isVisible ? "translateY(0)" : "translateY(30px)",
-              transition: "all 0.8s ease-in-out",
-              transitionDelay: `${0.2 + index * 0.2}s`,
-              width: "100%",
-            }}
-          >
-            <ProjectBox
-              project={project}
-              screenWidth={screenWidth}
-              isMobileScreen={isMobileScreen}
-            />
-          </div>
+            project={project}
+            screenWidth={screenWidth}
+            isMobileScreen={isMobileScreen}
+            animationDelay={0.2 + index * 0.2}
+          />
         ))}
       </div>
     </div>

@@ -1,7 +1,35 @@
 import { FaGithub, FaExternalLinkAlt, FaPlayCircle } from "react-icons/fa";
+import { useState, useEffect } from "react";
 
-const ProjectBox = ({ project, screenWidth, isMobileScreen }) => {
+const ProjectBox = ({
+  project,
+  screenWidth,
+  isMobileScreen,
+  animationDelay = 0,
+}) => {
   const isMobile = screenWidth < 768;
+  const isSmallMobile = screenWidth < 380;
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsVisible(true);
+    }, animationDelay * 1000);
+
+    return () => clearTimeout(timer);
+  }, [animationDelay]);
+
+  // Animation styles
+  const animationStyle = `
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes shimmer {
+      0% { background-position: -200% 0; }
+      100% { background-position: 200% 0; }
+    }
+  `;
 
   return (
     <div
@@ -11,27 +39,46 @@ const ProjectBox = ({ project, screenWidth, isMobileScreen }) => {
         alignItems: "center",
         background:
           "linear-gradient(145deg, rgba(13, 24, 36, 0.8) 0%, rgba(9, 15, 26, 0.9) 100%)",
-        padding: isMobileScreen ? "20px 15px" : "30px",
+        padding: isSmallMobile
+          ? "15px 12px"
+          : isMobileScreen
+            ? "18px 15px"
+            : "30px",
         borderRadius: isMobileScreen ? "12px" : "16px",
         boxShadow: "0 10px 30px rgba(0, 0, 0, 0.3)",
         width: "100%",
-        gap: isMobileScreen ? "15px" : isMobile ? "20px" : "40px",
+        gap: isSmallMobile
+          ? "12px"
+          : isMobileScreen
+            ? "15px"
+            : isMobile
+              ? "20px"
+              : "40px",
         position: "relative",
         overflow: "hidden",
         border: "1px solid rgba(0, 195, 255, 0.1)",
         transition: "all 0.3s ease",
+        opacity: isVisible ? 1 : 0,
+        transform: isVisible ? "translateY(0)" : "translateY(30px)",
+        transition: "opacity 0.5s ease-out, transform 0.5s ease-out",
       }}
       onMouseEnter={(e) => {
-        e.target.style.transform = "translateY(-5px)";
-        e.target.style.boxShadow = "0 15px 40px rgba(0, 136, 255, 0.2)";
-        e.target.style.borderColor = "rgba(0, 195, 255, 0.3)";
+        if (!isMobileScreen) {
+          e.target.style.transform = "translateY(-5px)";
+          e.target.style.boxShadow = "0 15px 40px rgba(0, 136, 255, 0.2)";
+          e.target.style.borderColor = "rgba(0, 195, 255, 0.3)";
+        }
       }}
       onMouseLeave={(e) => {
-        e.target.style.transform = "translateY(0)";
-        e.target.style.boxShadow = "0 10px 30px rgba(0, 0, 0, 0.3)";
-        e.target.style.borderColor = "rgba(0, 195, 255, 0.1)";
+        if (!isMobileScreen) {
+          e.target.style.transform = "translateY(0)";
+          e.target.style.boxShadow = "0 10px 30px rgba(0, 0, 0, 0.3)";
+          e.target.style.borderColor = "rgba(0, 195, 255, 0.1)";
+        }
       }}
     >
+      <style>{animationStyle}</style>
+
       {/* Top accent border */}
       <div
         style={{
@@ -42,6 +89,8 @@ const ProjectBox = ({ project, screenWidth, isMobileScreen }) => {
           height: isMobileScreen ? "2px" : "3px",
           background: "linear-gradient(90deg, #00c2ff, #00ff8a)",
           opacity: 0.8,
+          backgroundSize: "200% 200%",
+          animation: isVisible ? "shimmer 3s ease infinite" : "none",
         }}
       />
 
@@ -62,6 +111,7 @@ const ProjectBox = ({ project, screenWidth, isMobileScreen }) => {
             border: "1px solid rgba(255, 255, 255, 0.1)",
             position: "relative",
             transition: "all 0.3s ease",
+            width: isMobileScreen ? "100%" : "auto",
           }}
         >
           <img
@@ -69,16 +119,26 @@ const ProjectBox = ({ project, screenWidth, isMobileScreen }) => {
             alt={project.title}
             style={{
               width: isMobileScreen ? "100%" : isMobile ? "280px" : "320px",
-              height: isMobileScreen ? "140px" : isMobile ? "160px" : "180px",
+              height: isSmallMobile
+                ? "120px"
+                : isMobileScreen
+                  ? "140px"
+                  : isMobile
+                    ? "160px"
+                    : "180px",
               objectFit: "cover",
               display: "block",
               transition: "all 0.5s ease",
             }}
             onMouseEnter={(e) => {
-              e.target.style.transform = "scale(1.05)";
+              if (!isMobileScreen) {
+                e.target.style.transform = "scale(1.05)";
+              }
             }}
             onMouseLeave={(e) => {
-              e.target.style.transform = "scale(1)";
+              if (!isMobileScreen) {
+                e.target.style.transform = "scale(1)";
+              }
             }}
           />
           <div
@@ -100,18 +160,35 @@ const ProjectBox = ({ project, screenWidth, isMobileScreen }) => {
       <div
         style={{
           width: isMobile ? "100%" : "60%",
-          padding: isMobile ? (isMobileScreen ? "5px 0" : "10px 0") : "0",
+          padding: isSmallMobile
+            ? "3px 0"
+            : isMobileScreen
+              ? "5px 0"
+              : isMobile
+                ? "10px 0"
+                : "0",
         }}
       >
         <h2
           style={{
-            fontSize: isMobileScreen ? "20px" : isMobile ? "24px" : "28px",
-            marginBottom: isMobileScreen ? "10px" : "15px",
+            fontSize: isSmallMobile
+              ? "18px"
+              : isMobileScreen
+                ? "20px"
+                : isMobile
+                  ? "24px"
+                  : "28px",
+            marginBottom: isSmallMobile
+              ? "8px"
+              : isMobileScreen
+                ? "10px"
+                : "15px",
             background: "linear-gradient(45deg, #00c2ff, #00ff8a)",
             WebkitBackgroundClip: "text",
             color: "transparent",
             fontWeight: "700",
             letterSpacing: isMobileScreen ? "0.5px" : "1px",
+            lineHeight: 1.3,
           }}
         >
           {project.title}
@@ -119,10 +196,14 @@ const ProjectBox = ({ project, screenWidth, isMobileScreen }) => {
 
         <p
           style={{
-            fontSize: isMobileScreen ? "14px" : "16px",
+            fontSize: isSmallMobile ? "13px" : isMobileScreen ? "14px" : "16px",
             color: "#e0e0e0",
-            lineHeight: "1.6",
-            marginBottom: isMobileScreen ? "15px" : "20px",
+            lineHeight: isMobileScreen ? "1.5" : "1.6",
+            marginBottom: isSmallMobile
+              ? "12px"
+              : isMobileScreen
+                ? "15px"
+                : "20px",
           }}
         >
           {project.description}
@@ -130,16 +211,28 @@ const ProjectBox = ({ project, screenWidth, isMobileScreen }) => {
 
         <div
           style={{
-            padding: isMobileScreen ? "8px 10px" : "10px 15px",
+            padding: isSmallMobile
+              ? "6px 8px"
+              : isMobileScreen
+                ? "8px 10px"
+                : "10px 15px",
             background: "rgba(0, 0, 0, 0.2)",
             borderRadius: isMobileScreen ? "8px" : "10px",
-            marginBottom: isMobileScreen ? "15px" : "20px",
+            marginBottom: isSmallMobile
+              ? "12px"
+              : isMobileScreen
+                ? "15px"
+                : "20px",
             border: "1px solid rgba(255, 255, 255, 0.05)",
           }}
         >
           <p
             style={{
-              fontSize: isMobileScreen ? "13px" : "15px",
+              fontSize: isSmallMobile
+                ? "12px"
+                : isMobileScreen
+                  ? "13px"
+                  : "15px",
               color: "#a0b0c0",
               fontFamily: "monospace",
               letterSpacing: "0.5px",
@@ -152,7 +245,7 @@ const ProjectBox = ({ project, screenWidth, isMobileScreen }) => {
         <div
           style={{
             display: "flex",
-            gap: isMobileScreen ? "8px" : "15px",
+            gap: isSmallMobile ? "6px" : isMobileScreen ? "8px" : "15px",
             flexWrap: "wrap",
           }}
         >
@@ -163,13 +256,21 @@ const ProjectBox = ({ project, screenWidth, isMobileScreen }) => {
             style={{
               display: "flex",
               alignItems: "center",
-              gap: isMobileScreen ? "5px" : "8px",
-              padding: isMobileScreen ? "8px 14px" : "10px 18px",
+              gap: isSmallMobile ? "4px" : isMobileScreen ? "5px" : "8px",
+              padding: isSmallMobile
+                ? "7px 12px"
+                : isMobileScreen
+                  ? "8px 14px"
+                  : "10px 18px",
               background: "linear-gradient(90deg, #0055ff, #00c2ff)",
               color: "white",
               textDecoration: "none",
               borderRadius: isMobileScreen ? "6px" : "8px",
-              fontSize: isMobileScreen ? "13px" : "15px",
+              fontSize: isSmallMobile
+                ? "12px"
+                : isMobileScreen
+                  ? "13px"
+                  : "15px",
               fontWeight: "500",
               transition: "all 0.3s ease",
               border: "none",
@@ -184,7 +285,9 @@ const ProjectBox = ({ project, screenWidth, isMobileScreen }) => {
               e.target.style.boxShadow = "0 4px 15px rgba(0, 136, 255, 0.3)";
             }}
           >
-            <FaExternalLinkAlt size={isMobileScreen ? 12 : 14} />
+            <FaExternalLinkAlt
+              size={isSmallMobile ? 11 : isMobileScreen ? 12 : 14}
+            />
             View Project
           </a>
 
@@ -196,13 +299,21 @@ const ProjectBox = ({ project, screenWidth, isMobileScreen }) => {
               style={{
                 display: "flex",
                 alignItems: "center",
-                gap: isMobileScreen ? "5px" : "8px",
-                padding: isMobileScreen ? "8px 14px" : "10px 18px",
+                gap: isSmallMobile ? "4px" : isMobileScreen ? "5px" : "8px",
+                padding: isSmallMobile
+                  ? "7px 12px"
+                  : isMobileScreen
+                    ? "8px 14px"
+                    : "10px 18px",
                 background: "linear-gradient(90deg, #00c275, #00ff8a)",
                 color: "white",
                 textDecoration: "none",
                 borderRadius: isMobileScreen ? "6px" : "8px",
-                fontSize: isMobileScreen ? "13px" : "15px",
+                fontSize: isSmallMobile
+                  ? "12px"
+                  : isMobileScreen
+                    ? "13px"
+                    : "15px",
                 fontWeight: "500",
                 transition: "all 0.3s ease",
                 border: "none",
@@ -217,7 +328,9 @@ const ProjectBox = ({ project, screenWidth, isMobileScreen }) => {
                 e.target.style.boxShadow = "0 4px 15px rgba(0, 255, 136, 0.3)";
               }}
             >
-              <FaPlayCircle size={isMobileScreen ? 12 : 14} />
+              <FaPlayCircle
+                size={isSmallMobile ? 11 : isMobileScreen ? 12 : 14}
+              />
               Watch Demo
             </a>
           )}
@@ -230,8 +343,8 @@ const ProjectBox = ({ project, screenWidth, isMobileScreen }) => {
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              width: isMobileScreen ? "36px" : "40px",
-              height: isMobileScreen ? "36px" : "40px",
+              width: isSmallMobile ? "34px" : isMobileScreen ? "36px" : "40px",
+              height: isSmallMobile ? "34px" : isMobileScreen ? "36px" : "40px",
               background: "rgba(255, 255, 255, 0.05)",
               color: "#a0b0c0",
               textDecoration: "none",
@@ -250,7 +363,7 @@ const ProjectBox = ({ project, screenWidth, isMobileScreen }) => {
               e.target.style.transform = "translateY(0)";
             }}
           >
-            <FaGithub size={isMobileScreen ? 16 : 18} />
+            <FaGithub size={isSmallMobile ? 15 : isMobileScreen ? 16 : 18} />
           </a>
         </div>
       </div>
