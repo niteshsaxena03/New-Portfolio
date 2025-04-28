@@ -1,35 +1,18 @@
 import { useState, useEffect } from "react";
 import DSABox from "../components/DSABox";
-
-const achievements = [
-  {
-    title: "ACM ICPC Regionals",
-    description:
-      "Qualified for ACM ICPC Kanpur Regionals 2024 after securing Rank 1 in my college.",
-    image: "/images/ICPC.png", // Correct path for Vercel deployment
-    link: "https://icpc.global/ICPCID/HU1MX4AWA8HJ",
-  },
-  {
-    title: "Codeforces Specialist",
-    description:
-      "Solved 200+ problems on Codeforces with a Specialist rating of 1421.",
-    image: "/images/Codeforces.png", // Correct path for Vercel deployment
-    link: "https://codeforces.com/profile/niteshsaxena003",
-  },
-  {
-    title: "LeetCode Knight",
-    description:
-      "Solved 500+ problems on LeetCode and achieved a Knight rating badge with 1888 rating.",
-    image: "/images/Leetcode.png", // Correct path for Vercel deployment
-    link: "https://leetcode.com/u/niteshsaxena03/",
-  },
-];
+import dsaData from "../data/dsaData";
 
 const DSAPage = () => {
   const [screenWidth, setScreenWidth] = useState(window.innerWidth);
+  const [isMobileScreen, setIsMobileScreen] = useState(
+    window.innerWidth <= 480
+  );
 
   useEffect(() => {
-    const handleResize = () => setScreenWidth(window.innerWidth);
+    const handleResize = () => {
+      setScreenWidth(window.innerWidth);
+      setIsMobileScreen(window.innerWidth <= 480);
+    };
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
@@ -37,30 +20,96 @@ const DSAPage = () => {
   return (
     <div
       style={{
+        position: "relative",
+        minHeight: "100vh",
+        backgroundColor: "#070b11",
         display: "flex",
         flexDirection: "column",
-        minHeight: "100vh",
-        backgroundColor: "black",
-        padding: "20px",
-        color: "white",
+        alignItems: "center",
+        overflow: "hidden",
+        padding: isMobileScreen ? "80px 15px 20px" : "100px 30px 30px",
       }}
     >
-    
+      {/* Floating lights */}
       <div
         style={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          gap: "20px",
+          position: "absolute",
+          top: 0,
+          left: 0,
+          width: "100%",
+          height: "100%",
+          overflow: "hidden",
+          zIndex: 0,
+          pointerEvents: "none",
         }}
       >
-        {achievements.map((achievement, index) => (
-          <DSABox
-            key={index}
-            achievement={achievement}
-            screenWidth={screenWidth}
-          />
-        ))}
+        <div
+          style={{
+            position: "absolute",
+            top: "10%",
+            left: "5%",
+            width: isMobileScreen ? "150px" : "300px",
+            height: isMobileScreen ? "150px" : "300px",
+            borderRadius: "50%",
+            background:
+              "radial-gradient(circle, rgba(0, 112, 255, 0.15) 0%, rgba(7, 11, 17, 0) 70%)",
+            filter: "blur(20px)",
+          }}
+        />
+        <div
+          style={{
+            position: "absolute",
+            bottom: "20%",
+            right: "10%",
+            width: isMobileScreen ? "180px" : "350px",
+            height: isMobileScreen ? "180px" : "350px",
+            borderRadius: "50%",
+            background:
+              "radial-gradient(circle, rgba(0, 255, 149, 0.1) 0%, rgba(7, 11, 17, 0) 70%)",
+            filter: "blur(30px)",
+          }}
+        />
+      </div>
+
+      <div
+        style={{
+          zIndex: 1,
+          width: "100%",
+          maxWidth: "1200px",
+        }}
+      >
+        <h1
+          style={{
+            fontSize: isMobileScreen ? "28px" : "36px",
+            textAlign: "center",
+            marginBottom: isMobileScreen ? "20px" : "30px",
+            background: "linear-gradient(135deg, #00f2fe, #4facfe)",
+            WebkitBackgroundClip: "text",
+            color: "transparent",
+            fontWeight: "700",
+            letterSpacing: "1px",
+          }}
+        >
+          Data Structures & Algorithms
+        </h1>
+
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "1fr",
+            gap: isMobileScreen ? "20px" : "30px",
+            width: "100%",
+          }}
+        >
+          {dsaData.map((dsa, index) => (
+            <DSABox
+              key={index}
+              dsa={dsa}
+              screenWidth={screenWidth}
+              isMobileScreen={isMobileScreen}
+            />
+          ))}
+        </div>
       </div>
     </div>
   );
