@@ -35,7 +35,7 @@ const ContactPage = () => {
     },
     {
       name: "Gmail",
-      url: "mailto:niteshsaxena114@gmail.com",
+      url: "mailto:niteshsaxena.work@gmail.com",
       icon: <FaEnvelope size={24} />,
       color: "#ff3366",
     },
@@ -237,27 +237,7 @@ const ContactPage = () => {
           ))}
         </div>
 
-        <div
-          style={{
-            marginTop: "40px",
-            padding: "20px",
-            background: "rgba(0, 0, 0, 0.2)",
-            borderRadius: "12px",
-            border: "1px solid rgba(255, 255, 255, 0.05)",
-          }}
-        >
-          <p
-            style={{
-              fontSize: "16px",
-              color: "#a0b0c0",
-              textAlign: "center",
-              margin: 0,
-            }}
-          >
-            <span style={{ color: "#00ff8a" }}>Email:</span>{" "}
-            niteshsaxena114@gmail.com
-          </p>
-        </div>
+        
       </div>
     </div>
   );
